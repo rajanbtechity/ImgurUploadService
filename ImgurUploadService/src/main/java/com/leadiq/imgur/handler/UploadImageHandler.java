@@ -41,8 +41,6 @@ public class UploadImageHandler {
 				imageUploadRsp=new JSONObject(UploadImageService.uploadImage(urlArray.get(i).toString()));
 				hashId=imageUploadRsp.optJSONObject("data").optString("id");
 				imgUrl=imageUploadRsp.optJSONObject("data").optString("link");
-				System.out.println("HashId:"+hashId);
-				System.out.println("imgUrl:"+imgUrl);
 				SaveDataInDataStore.storeImgIdWithUrl(imgUrl);
 				finalJsonRsp.putOpt(urlArray.get(i).toString(),imageUploadRsp.toString());
 
@@ -51,8 +49,6 @@ public class UploadImageHandler {
 			e.printStackTrace();
 
 		}
-
-		System.out.println(finalJsonRsp.toString());
 
 		return finalJsonRsp.toString();
 
