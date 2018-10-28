@@ -21,7 +21,6 @@ public class GenerateAcessToken {
 	public Response getAccessToken()
 	{
 		String accessToken=AccessTokenService.doHttpClient();
-		JSONObject json=new JSONObject(accessToken);
 		
 		return Response.status(Status.OK).entity(accessToken).build();
 	}

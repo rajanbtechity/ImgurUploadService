@@ -1,0 +1,5 @@
+1. When using @Consume(MediaType.APPLICATION_JSON) 
+return Response.status(Status.OK).entity(accessToken).build() works fine when a String argument is passed.
+
+Is there any other way to return json Response?
+Why jsonObject.toString doesn't work? See implementation of entity method.
