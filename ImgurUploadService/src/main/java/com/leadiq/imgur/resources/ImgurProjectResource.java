@@ -24,7 +24,7 @@ public class ImgurProjectResource {
 	public Response getAllImages()
 	{
 		String getImgRsp=GetImageHandler.processGetImage();
-		return null;
+		return Response.status(Status.OK).entity(getImgRsp).build();
 		
 	}
 	

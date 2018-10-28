@@ -17,6 +17,8 @@ public class UploadImageHandler {
 	
 	public static String processUploadImage(InputStream incomingData) {
 		StringBuilder inputData = new StringBuilder();
+		String hashId="";
+		String imgUrl="";
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(
 					incomingData));
@@ -28,15 +30,21 @@ public class UploadImageHandler {
 			e.printStackTrace();
 		}
 
-		JSONObject jsonRsp = new JSONObject();
+		JSONObject finalJsonRsp = new JSONObject();
+		JSONObject imageUploadRsp=null;
 		try {
 			JSONObject inputJson = new JSONObject(inputData.toString());
 			JSONArray urlArray = inputJson.optJSONArray("urls");
 
 			for (int i = 0; i < urlArray.length(); i++) {
-
-				jsonRsp.putOpt(urlArray.get(i).toString(), UploadImageService
-						.uploadImage(urlArray.get(i).toString()));
+				
+				imageUploadRsp=new JSONObject(UploadImageService.uploadImage(urlArray.get(i).toString()));
+				hashId=imageUploadRsp.optJSONObject("data").optString("id");
+				imgUrl=imageUploadRsp.optJSONObject("data").optString("link");
+				System.out.println("HashId:"+hashId);
+				System.out.println("imgUrl:"+imgUrl);
+				SaveDataInDataStore.storeImgIdWithUrl(imgUrl);
+				finalJsonRsp.putOpt(urlArray.get(i).toString(),imageUploadRsp.toString());
 
 			}
 		} catch (IOException e) {
@@ -44,9 +52,9 @@ public class UploadImageHandler {
 
 		}
 
-		System.out.println(jsonRsp.toString());
+		System.out.println(finalJsonRsp.toString());
 
-		return jsonRsp.toString();
+		return finalJsonRsp.toString();
 
 	}
 

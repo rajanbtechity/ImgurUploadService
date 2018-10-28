@@ -11,3 +11,42 @@ To Do List
 need java code to download a file using a link and then call UploadImageService.java.
 4. make it multithreaded. Main thread should return the status back to the rest client and 
 child thread should continue uploading the image.
+
+
+How to test
+1. Use Postman
+
+
+2. First use POST  method to post images to imgur
+  method=POST
+  
+  url=http://localhost:8041/ImgurUploadService/v1/images/upload(replace port)
+    
+  body=
+  
+  {
+"urls": [
+"C:\\Users\\Rajan\\Desktop\\testimgurimage1.gif",
+"C:\\Users\\Rajan\\Desktop\\testimgurimage2.gif"
+]
+}
+
+//Use desktop image url
+
+output- JSON response with details of the images uploaded
+
+
+3. In postman open another tab and use GET method
+
+ method = GET
+ url=http://localhost:8041/ImgurUploadService/v1/images(replace port)
+
+output- List of image url
+
+Sample Response
+{
+    "uploaded": [
+        "https://i.imgur.com/FeQlKE0.jpg",
+        "https://i.imgur.com/tg0ubjy.jpg"
+    ]
+}
