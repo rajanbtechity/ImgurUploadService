@@ -49,6 +49,8 @@ public class UploadImageHandler {
 			e.printStackTrace();
 
 		}
+		
+		System.out.println("File Upload Completed with Combined Json Response:"+finalJsonRsp.toString());
 
 		return finalJsonRsp.toString();
 

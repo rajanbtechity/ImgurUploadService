@@ -8,6 +8,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -50,10 +52,20 @@ public class ImgurProjectResource {
 	@Path("/upload")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response uploadImageimgur(InputStream incomingData) {
-		String uploadImgRsp=UploadImageHandler.processUploadImage(incomingData);
-		return Response.status(Status.OK).entity(uploadImgRsp).build();
+	public Response uploadImageimgur(InputStream incomingData,@Suspended final AsyncResponse asyncResponse) {
+		
+		new Thread(new Runnable() {
+            @Override
+            public void run() {
+            	asyncResponse.resume("{\"Job Status\":\"Success-Image Upload processing in background\"}");
+            	String uploadImgRsp=UploadImageHandler.processUploadImage(incomingData);
+            	
+            }
+        }).start();
+		
+		return Response.status(Status.OK).entity("{\"Job Status\":\"Failed\"}").build();
 
 	}
+
 
 }
