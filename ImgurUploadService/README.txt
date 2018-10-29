@@ -1,16 +1,15 @@
-1. com.leadiq.imgur.resources will contain classes/method which are exposed as rest API
-2. From these classes/method we will call different class/method to handle the request as required.
-3. com.leadiq.imgur.webservice UploadImageService.java, this is a standalone class for now.
-We can run it and upload an image from our desktop to imgur site. Need to expose it as rest api 
-by completing UploadImage.java class in com.leadiq.imgur.resources package.
+1. com.leadiq.imgur.resources package has ImgurProjectResource.java which has all end points.
+2. ImgurProjectResource.java passes control to com.leadiq.imgur.handler package to handle and process the request.
+3. Handler class finally calls webservice package class to make imgur Rest API call.
+4. To upload image we can provide either desktop url or http url.
+5. processUploadImage method in UploadImageHandler class calls another mathod getBase64encodedImage in the same class
+to convert the image into Base64 format.
+6. getBase64encodedImage checks for if url starts with "http:", if it starts with "http:" it uses inputStream
+and URLConnection to download the image and convert it into Base64 Format.
+Otherwise it reads the image file from desktop url and converts it into Base64 format.
 
-To Do List
-1. This upload image works for uploading image from Desktop.
-2. Modify it to accept array of url and call UploadImageService.java multiple times.
-3. We might need to download an image from a given link and upload that to imgur. For that
-need java code to download a file using a link and then call UploadImageService.java.
-4. make it multithreaded. Main thread should return the status back to the rest client and 
-child thread should continue uploading the image.
+
+
 
 
 How to test
@@ -23,17 +22,27 @@ How to test
   url=http://localhost:8041/ImgurUploadService/v1/images/upload(replace port)
     
   body=
-  
-  {
+ 
+ ==>Desktop File 
+ {
 "urls": [
-"C:\\Users\\Rajan\\Desktop\\testimgurimage1.gif",
-"C:\\Users\\Rajan\\Desktop\\testimgurimage2.gif"
+"C:\\Users\\Rajan\\Desktop\\testimgurimage1.jpg"
 ]
 }
 
-//Use desktop image url
+==> http file(u can upload an image to imgur and then use the image link returned to upload it again)
+{
+"urls": [
+"https://i.imgur.com/XIriPqh.jpg"
+]
+}
 
-output- JSON response with details of the images uploaded
+
+Output- Async Response
+
+{
+    "Job Status": "Success-Image Upload processing in background"
+}
 
 
 3. In postman open another tab and use GET method
